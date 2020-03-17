@@ -142,7 +142,7 @@
 #contain{
     width: 100%;
     height: 1092px;
-    background: rgb(243, 243, 243);
+    background: rgb(234,237,241);
 }
 
 .container .el-breadcrumb{

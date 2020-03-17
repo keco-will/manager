@@ -208,13 +208,13 @@ export default {
 <style scoped>
 #contain{
     width: 100%;
-    height: 1050px;
-    background: rgb(255, 255, 255);
+    height: 100%;
+    background: rgb(234,237,241);
 }
 #contain .about{
     width: 100%;
     font-size: 18px;
-    background: rgb(251, 254, 255);
+    background: rgb(234,237,241);
 }
 #contain .main{
     width: 80%;
@@ -236,7 +236,7 @@ export default {
 }
 .main li > div{
     min-height: 250px;
-    background: rgb(255, 252, 234);
+    background: rgb(255, 253, 244);
 }
 #contain .el-button{
     float: right;

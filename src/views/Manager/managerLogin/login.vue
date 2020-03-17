@@ -55,17 +55,19 @@ export default {
 <style scoped>
 .contain{
   width: 100%;
-  height: 1150px;
+  height: 100%;
   background: rgb(22, 128, 214);
 }
 .box{
   background: white;
   width: 580px;
   height: 440px;
-  position: relative;
-  top: 28%;
-  left: 38%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 3px;
   border: 2px rgb(0, 0, 0) solid;
+  transform: translate(-50%,-50%);
 }
 .logo{
   width: 100%;

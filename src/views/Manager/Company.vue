@@ -22,6 +22,13 @@
                 </el-table-column>
 
                 <el-table-column
+                label="待审核成果"
+                show-overflow-tooltip>
+                <template slot-scope="scope">
+                    <el-button type="text" class="btn1" @click="forMore(scope.row)">{{scope.row.waiting}}</el-button>
+                </template>
+                </el-table-column>
+                <el-table-column
                 label="时间"
                 width="280">
                 <template slot-scope="scope">{{ scope.row.date }}</template>
@@ -31,13 +38,7 @@
                 width="120">
                 <template slot-scope="scope">{{ scope.row.name}}</template>
                 </el-table-column>
-                <el-table-column
-                label="待审核成果"
-                show-overflow-tooltip>
-                <template slot-scope="scope">
-                    <el-button type="text" class="btn1" @click="forMore(scope.row)">{{scope.row.waiting}}</el-button>
-                </template>
-                </el-table-column>
+                
             </el-table>
             <div style="margin-top: 20px">
                 <el-button type="success" round @click="passAll()">批量通过</el-button>
@@ -126,7 +127,7 @@ export default {
 #contain{
     width: 100%;
     height: 1092px;
-    background: rgb(243, 243, 243);
+    background: rgb(234,237,241);
 }
 
 .container .el-breadcrumb{
@@ -145,7 +146,7 @@ export default {
     border-color: white;
 }
 #main{
-    width: 65%;
+    width: 100%;
     margin: 10px auto;
 }
 #main .el-table .el-button--text{

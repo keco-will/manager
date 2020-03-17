@@ -100,7 +100,7 @@ export default {
 #contain{
     width: 100%;
     height: 1092px;
-    background: rgb(230, 229, 229);
+    background: rgb(234,237,241);
 }
 
 .container .el-breadcrumb{
@@ -112,7 +112,7 @@ export default {
     height: 100%;
 }
 #main{
-  width: 80%;
+  width: 100%;
   margin: 10px auto;
 }
 #main .btn1{

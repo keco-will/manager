@@ -10,36 +10,39 @@
         </div>
         <el-container style="height: 500px; ">
   <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
-    <el-menu :default-openeds="['1', '3']">
+    <el-menu :default-openeds="actives">
       <el-submenu index="1">
-        <template slot="title">用户管理</template>
+        <template slot="title" >用户管理</template>
         <el-menu-item-group>
           <el-menu-item index="1-1" @click="goUserList()">用户列表</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
-
       <el-submenu index="2">
-        <template slot="title">权限管理</template>
+        <template slot="title" >审批管理</template>
         <el-menu-item-group>
-          <el-menu-item index="2-1" @click="goRoleList()">角色列表</el-menu-item>
-          <el-menu-item index="2-2" @click="goPermissionList()">权限列表</el-menu-item>
+          <el-menu-item index="2-1" @click="goSincere()">科研成果</el-menu-item>
+          <el-menu-item index="2-2" @click="goCompany()">企业需求</el-menu-item>
         </el-menu-item-group>
-        
       </el-submenu>
+
       <el-submenu index="3">
-        <template slot="title">基本信息管理</template>
+        <template slot="title" >基本信息管理</template>
         <el-menu-item-group>
           <el-menu-item index="3-1" @click="goNewsManage()">新闻管理</el-menu-item>
           <el-menu-item index="3-2" @click="goNoticePublish()">通知公告</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
       <el-submenu index="4">
-        <template slot="title">审批管理</template>
+        <template slot="title">权限管理</template>
         <el-menu-item-group>
-          <el-menu-item index="3-1" @click="goSincere()">科研成果</el-menu-item>
-          <el-menu-item index="3-2" @click="goCompany()">企业需求</el-menu-item>
+          <el-menu-item index="4-1" @click="goRoleList()">角色列表</el-menu-item>
+          <el-menu-item index="4-2" @click="goPermissionList()">权限列表</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
+
+      
+
+      
     </el-menu>
   </el-aside>
   
@@ -54,6 +57,7 @@ export default {
     data(){
         return{
           name:'',
+          actives:[],
         }
     },
     methods:{
@@ -66,6 +70,10 @@ export default {
             localStorage.getItem("islogin",false);
             localStorage.getItem("token","");
             this.$router.push('/')
+        },
+        active(index){
+          console.log(123)
+            this.actives=[index];
         },
         goRoleList(){
             this.$router.push('/manager/rolelist');
@@ -104,7 +112,7 @@ export default {
     float: right;
 }
 #header{
-    background: rgb(114, 214, 231);
+    background: rgb(21, 27, 39);
     height: 70px;
     line-height: 70px;
 }
@@ -115,10 +123,12 @@ export default {
     float: left;
 }
 .container .el-aside{
-    width: 350px!important;
+    width: 270px!important;
     height: 1095px;
     float: left;
+    background: rgb(21, 27, 39)!important;
 }
+
 .container .template{
     font-size: 24px!important;
 }
@@ -129,6 +139,17 @@ export default {
 }
 .container .el-menu-item{
   font-size: 19px;
-  background: rgb(230, 241, 243);
+  background: rgb(91, 102, 124);
+  color: white;
+}
+.container .el-menu-item :active{
+  color: blue!important;
+}
+.el-menu-item, .el-el-submenu{
+  background: rgb(21, 27, 39);
+  color: white;
+}
+.container{
+  height: 100%;
 }
 </style>

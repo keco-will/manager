@@ -33,11 +33,26 @@
                     <el-form-item label="邮箱">
                         <el-input v-model="formLabelAlign.mail"></el-input>
                     </el-form-item>
+                   
                     <el-form-item label="是否启用" >
-                        <el-input v-model="formLabelAlign.whether" placeholder="是/否"></el-input>
+                        <el-select v-model="formLabelAlign.whether" placeholder="请选择">
+                            <el-option
+                            v-for="item in options2"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
                     <el-form-item label="用户角色">
-                        <el-input v-model="formLabelAlign.role" placeholder="高校/管理员/企业"></el-input>
+                        <el-select v-model="formLabelAlign.role" placeholder="请选择">
+                            <el-option
+                            v-for="item in options1"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
                 </el-form>
                 <div style="margin-left: 20px;"><el-button type="text" @click="submit()">提交</el-button></div>
@@ -127,7 +142,7 @@
                     <el-form-item label="权限">
                         <el-select v-model="value" placeholder="请选择" >
                             <el-option
-                            v-for="item in options"
+                            v-for="item in options1"
                             :key="item.value"
                             :label="item.label"
                             :value="item.value">
@@ -199,7 +214,7 @@ export default {
                 tel:'',
             },
             //绑定修改权限的
-            options: [{
+            options1: [{
                 value: '管理员',      //这个看后台规定的参数是什么吧
                 label: '管理员'
                 }, {
@@ -209,6 +224,17 @@ export default {
                 value: '高校',
                 label: '高校'
             }],
+            options2:[    //状态
+                {
+                    value:'是',
+                    label:'是',
+                },
+                {
+                    value:'否',
+                    label:'否',
+                }
+            ],
+            
             value: '',
             
         }
@@ -376,14 +402,14 @@ export default {
 <style scoped>
 #contain{
     width: 100%;
-    height: 100%;
     height: 1089px;
-    background: rgb(243, 243, 243);
+    background: rgb(234,237,241);
 }
 .search{
     width: 300px;
     border-radius: 100px;
     margin-bottom:10px ;
+    margin-left:10px ;
 }
 .container .el-breadcrumb{
   line-height: 50px;
@@ -391,12 +417,13 @@ export default {
   height: 50px;
 }
 #contain .el-main{
-    width: 70%;
+    width: 100%;
     margin: 20px auto;
-    background: rgb(207, 236, 241);
+    background: white;
+    border: 1px white solid;
 }
 #contain .el-table{
-    border: 1px rgb(158, 160, 158) double;
+    
     line-height: 45px;
     font-size: 22px;
     color: black;
@@ -418,6 +445,8 @@ export default {
     line-height: 25px;
     border: 1px rgb(214, 214, 214) solid;
     margin: 10px;
+    background: rgb(243, 243, 243);
+    width: 60%;
 }
 #contain .newone .el-input{
     height: 25px;
