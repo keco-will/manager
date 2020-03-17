@@ -1,15 +1,38 @@
 <template>
     <div id="contain">
         <div class="header">{{logo}}</div>
-        <ul class="about">
-            <li>
-                负责人：{{charge}}
+        <ul class="about" v-if="flag===1">
+            <li >
+                负责人：{{sic.charge}}
+            </li>
+            <li >
+                个人联系方式：{{sic.information}}
             </li>
             <li>
-                联系方式：{{contacts}}
+                联系方式：{{sic.contacts}}
             </li>
             <li>
-                邮箱：{{mail}}
+                联系人电话：{{sic.tel}}
+            </li>
+            <li>
+                联系邮箱：{{sic.mail}}
+            </li>
+             <li>
+                学科类型：{{sic.confic}}
+            </li>
+           <el-link target="_blank" :href="URL" :underline="false" style="margin-left:0%">
+            <el-button size="mini" type="success" >文件下载</el-button>
+        </el-link>
+        </ul>
+        <ul class="about" v-else>
+            <li >
+                联系人：{{cop.contacts}}
+            </li>
+           <li>
+                联系邮箱：{{cop.mail}}
+            </li>
+             <li>
+                需求学科：{{cop.needs}}
             </li>
            <el-link target="_blank" :href="URL" :underline="false" style="margin-left:0%">
             <el-button size="mini" type="success" >文件下载</el-button>
@@ -23,7 +46,7 @@
                     </div>
                  </li>
                  <li>科技创新：<br>
-                    <div v-html="content.texNew">
+                    <div v-html="content.tecNew">
                     </div>
                  </li>
                  <li>未来展望：<br>
@@ -75,6 +98,8 @@ export default {
             mail:'',
             flag:0, 
             URL:'',
+            sic:{},
+            cop:{},
         }
     },
     methods:{
@@ -108,9 +133,12 @@ export default {
                 this.content.tecNew=data.tecNew;
                 this.content.future=data.future;
 
-                this.charge=data.charge;
-                this.contacts=data.contacts;
-                this.mail=data.mail;
+                this.sic.charge=data.charge;
+                this.sic.contacts=data.contacts;
+                this.sic.mail=data.mail;
+                this.sic.information=data.information;
+                this.sic.tel=data.tel;
+                this.sic.confic=data.confic;
                 this.URL=data.fileurl;
             })
         },
@@ -126,9 +154,9 @@ export default {
                 this.content.budget=data.budget;
                 this.content.document=data.document;
 
-                this.charge=data.publisher;
-                this.contacts=data.contacts;
-                this.mail=data.mail;
+                this.cop.contacts=data.contacts;
+                this.cop.needs=data.needs;
+                this.cop.mail=data.mail;
                 this.URL=data.fileurl;
             })
         },
@@ -208,7 +236,7 @@ export default {
 <style scoped>
 #contain{
     width: 100%;
-    height: 100%;
+    min-height: 100%;
     background: rgb(234,237,241);
 }
 #contain .about{
@@ -216,6 +244,7 @@ export default {
     font-size: 18px;
     background: rgb(234,237,241);
 }
+#contain .about li{}
 #contain .main{
     width: 80%;
     margin: 10px auto;
@@ -231,6 +260,7 @@ export default {
     min-height: 450px;
     margin: 0px auto;
 }
+
 .main li{
     min-height: 250px;
 }
@@ -250,6 +280,7 @@ export default {
     text-align: center;
     line-height: 25px;
     font-size: 25px;
-    margin: 10px;
+    margin: 5px;
+    border-bottom:1px black solid ;
 }
 </style>

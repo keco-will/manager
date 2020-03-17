@@ -51,7 +51,7 @@ export default {
 <style scoped>
 #contain{
     width: 100%;
-    height: 1092px;
+    height:100%;
     background: rgb(234,237,241);
 }
 
@@ -67,7 +67,7 @@ export default {
   width: 100%;
 }
 #main{
-    width: 65%;
+    width: 75%;
     margin: 50px auto;
     padding: 30px;
     border: 1px rgb(255, 255, 255) solid;

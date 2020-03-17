@@ -66,7 +66,6 @@ export default {
   top: 50%;
   left: 50%;
   border-radius: 3px;
-  border: 2px rgb(0, 0, 0) solid;
   transform: translate(-50%,-50%);
 }
 .logo{

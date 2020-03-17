@@ -17,20 +17,27 @@
         </div>
         <div class="newone" v-show="isshow">
                     <div style="margin: 20px;"></div>
-                    <el-form :label-position="labelPosition" label-width="100px" :model="formLabelAlign">
-                    <el-form-item label="账号">
+                    <el-form :label-position="labelPosition" label-width="100px" :rules="rules" :model="formLabelAlign" ref="formLabelAlign">
+                    <el-form-item label="账号" required>
                         <el-input v-model="formLabelAlign.username"></el-input>
                     </el-form-item>
-                    <el-form-item label="密码" prop="pass">
+                    <el-form-item label="密码" required>
                         <el-input type="password" v-model="formLabelAlign.pass" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="确认密码" prop="checkPass">
+                    <el-form-item label="确认密码" >
                         <el-input type="password" v-model="formLabelAlign.checkPass" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="手机号">
+                    <el-form-item 
+                    label="手机号"
+                    prop="phone_number"
+                    required>
                         <el-input v-model="formLabelAlign.tel"></el-input>
                     </el-form-item>
-                    <el-form-item label="邮箱">
+                    <el-form-item 
+                    label="邮箱"
+                    prop="email"
+                    required
+                    >
                         <el-input v-model="formLabelAlign.mail"></el-input>
                     </el-form-item>
                    
@@ -58,9 +65,9 @@
                 <div style="margin-left: 20px;"><el-button type="text" @click="submit()">提交</el-button></div>
         </div>
       <el-table
-    :data="tableData.slice((currentPage-1)*PageSize,currentPage*PageSize)" 
-    border
-    style="width: 100%">
+        :data="tableData.slice((currentPage-1)*PageSize,currentPage*PageSize)" 
+        border
+        style="width: 100%">
     <el-table-column
       label="id"
       width="70">
@@ -70,7 +77,7 @@
     </el-table-column>
     <el-table-column
       label="用户名"
-      width="150">
+      width="200">
       <template slot-scope="scope">
         <span style="margin-left: 10px">{{ scope.row.username }}</span>
       </template>
@@ -183,6 +190,36 @@
 import search from '../../components/Search'
 export default {
     data(){
+        var checkemail=(rule,value,callback)=>{
+           const mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/
+            if (!value) {
+            return callback(new Error('邮箱不能为空'))
+            }
+            setTimeout(() => {
+            if (mailReg.test(value)) {
+                callback()
+            } else {
+                callback(new Error('请输入正确的邮箱格式'))
+            }
+            }, 100)
+        }
+        var check_phone=(rule,value,callback)=>{
+            const phoneReg = /^1[3|4|5|7|8][0-9]{9}$/
+            if (!value) {
+                return callback(new Error('电话号码不能为空'))
+            }
+            setTimeout(() => {
+            if (!Number.isInteger(+value)) {
+                callback(new Error('请输入数字值'))
+            } else {
+                if (phoneReg.test(value)) {
+                callback()
+                } else {
+                callback(new Error('电话号码格式不正确'))
+                }
+            }
+            }, 100)
+        }
         return{
           tableData: [
               
@@ -190,53 +227,63 @@ export default {
           //用户在有科研文章需要审核的时候，不能删除操作，该list和tabledata对应
           ifcould:[],    
           // 默认显示第几页
-            currentPage:1,
-            // 总条数，根据接口获取数据长度(注意：这里不能为空)
-            totalCount:3,
-            // 个数选择器（可修改）
-            pageSizes:[1,5,10],
-            // 默认每页显示的条数（可修改）
-            PageSize:10,
-            isshow:false,
-            labelPosition: 'middle',
-            formLabelAlign: {
-                username:'',
-                pass:'',
-                checkPass:'',
-                mail:'',
-                role:'',
-                tel:'',
-                whether:'',   //是否启用
+        currentPage:1,
+        // 总条数，根据接口获取数据长度(注意：这里不能为空)
+        totalCount:3,
+        // 个数选择器（可修改）
+        pageSizes:[1,5,10],
+        // 默认每页显示的条数（可修改）
+        PageSize:10,
+        isshow:false,
+        labelPosition: 'middle',
+        formLabelAlign: {
+            username:'',
+            pass:'',
+            checkPass:'',
+            mail:'',
+            role:'',
+            tel:'',
+            whether:'',   //是否启用
+        },
+        edit:{
+            name:'',
+            mail:'',
+            tel:'',
+        },
+        //绑定修改权限的
+        options1: [
+            // {
+            // value: '管理员',      //这个看后台规定的参数是什么吧
+            // label: '管理员'
+            // }, 
+            {
+            value: 'company',
+            label: '企业'
+            }, {
+            value: 'university',
+            label: '高校'
+        }],
+        options2:[    //状态
+            {
+                value:'是',
+                label:'是',
             },
-            edit:{
-                name:'',
-                mail:'',
-                tel:'',
-            },
-            //绑定修改权限的
-            options1: [{
-                value: '管理员',      //这个看后台规定的参数是什么吧
-                label: '管理员'
-                }, {
-                value: '企业',
-                label: '企业'
-                }, {
-                value: '高校',
-                label: '高校'
-            }],
-            options2:[    //状态
-                {
-                    value:'是',
-                    label:'是',
-                },
-                {
-                    value:'否',
-                    label:'否',
-                }
+            {
+                value:'否',
+                label:'否',
+            }
+        ],
+        
+        value: '',
+        rules:{
+            email:[
+                {validator:checkemail,trigger:'blur'}
+                
             ],
-            
-            value: '',
-            
+            phone_number:[
+                {validator:check_phone,trigger:'blur'}
+            ],
+        }
         }
             
     },
@@ -258,9 +305,13 @@ export default {
                     id:row.id
                 } 
             }).then(()=>{
+                if(row.role==='管理员'){
+                    alert('该账号是管理员，删除失败！')
+                }else{
+                    console.log(123)
                 this.$router.go(0);
+                }
             })
-            
         },
         forsearch(val){
             console.log(val)
@@ -402,7 +453,7 @@ export default {
 <style scoped>
 #contain{
     width: 100%;
-    height: 1089px;
+    min-height: 100%;
     background: rgb(234,237,241);
 }
 .search{
@@ -417,19 +468,19 @@ export default {
   height: 50px;
 }
 #contain .el-main{
-    width: 100%;
+    width: 95%;
     margin: 20px auto;
     background: white;
     border: 1px white solid;
 }
 #contain .el-table{
     
-    line-height: 45px;
+    line-height: 40px;
     font-size: 22px;
     color: black;
 }
 #contain .el-main .el-table .cell span{
-    line-height: 30px;
+    line-height: 25px;
     font-size: 19px;
 }
 #contain .el-pagination{
@@ -442,14 +493,15 @@ export default {
     margin-left: 20px;
 }
 #contain .newone {
-    line-height: 25px;
+    line-height: 20px;
     border: 1px rgb(214, 214, 214) solid;
-    margin: 10px;
+    margin: 5px;
     background: rgb(243, 243, 243);
     width: 60%;
 }
 #contain .newone .el-input{
-    height: 25px;
+    height: 20px;
+    margin: 0;
     width: 60%;
 }
 #contain .fenpeiquanxian{
