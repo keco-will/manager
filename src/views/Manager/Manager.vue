@@ -119,7 +119,7 @@ export default {
     float: right;
 }
 #header{
-    background: #333744;;
+    background: #333744;
     height: 70px;
     line-height: 70px;
 }
@@ -142,7 +142,7 @@ export default {
   height: 50px;
 }
 .container .el-menu-item{
-  font-size: 16px;
+  font-size: 14px;
   background: rgb(91, 102, 124);
   color: white;
 }
