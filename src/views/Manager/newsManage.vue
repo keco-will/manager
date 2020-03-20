@@ -59,7 +59,7 @@ export default {
           
       },
       handleDelete(index, row) {
-        this.$http.get('/deletenews',{
+        this.$http.get('boss/deletenews',{
             params:{
               id:row.id
             }
@@ -75,7 +75,7 @@ export default {
       },
        getDataList(){
           let per={};
-           this.$http.get('/news').then((res)=>{
+           this.$http.get('boss/news').then((res)=>{
                 let list = res.data.data;
                 let len = list.length; 
                 for(let i=0;i<len;i++){
@@ -125,6 +125,7 @@ export default {
   font-size: 20px;
 }
 #main .el-table .cell span{
-    line-height: 28px;
+    line-height: 26px;
+    font-size: 16px;
 }
 </style>

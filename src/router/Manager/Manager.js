@@ -5,7 +5,8 @@ export default {
         {
             name:'userlist',
             path:'userlist',
-            component:()=>import('../../views/Manager/userList.vue')
+            component:()=>import('../../views/Manager/userList.vue'),
+            meta:{ requiresAuth: true }
         },
         {
             name:'rolelist',

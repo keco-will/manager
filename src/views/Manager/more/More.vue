@@ -236,19 +236,19 @@ export default {
 <style scoped>
 #contain{
     width: 100%;
-    min-height: 100%;
+    height: 100%;
     background: rgb(234,237,241);
 }
 #contain .about{
     width: 100%;
-    font-size: 18px;
+    font-size: 16px;
     background: rgb(234,237,241);
 }
 #contain .about li{}
 #contain .main{
     width: 80%;
     margin: 10px auto;
-    min-height: 750px;
+    min-height: 650px;
     padding-top: 10px;
     padding-bottom:20px ;
     border-radius:20px ;
@@ -262,10 +262,10 @@ export default {
 }
 
 .main li{
-    min-height: 250px;
+    min-height: 220px;
 }
 .main li > div{
-    min-height: 250px;
+    min-height: 200px;
     background: rgb(255, 253, 244);
 }
 #contain .el-button{

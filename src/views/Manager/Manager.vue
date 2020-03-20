@@ -9,7 +9,7 @@
             </div>
         </div>
         <el-container style="height: 100%; ">
-  <el-aside width="200px" style="background-color: rgb(238, 241, 246); height:100%">
+  <el-aside width="200px" style="background-color: rgb(238, 241, 246); height:100%;">
     <el-menu :default-openeds="actives"
       background-color="rgb(21, 27, 39)"
       text-color="#fff"
@@ -75,7 +75,7 @@ export default {
         },
         quit(){
             localStorage.getItem("islogin",false);
-            localStorage.getItem("token","");
+            localStorage.getItem("Token","");
             this.$router.push('/')
         },
         active(index){
@@ -119,7 +119,7 @@ export default {
     float: right;
 }
 #header{
-    background: rgb(21, 27, 39);
+    background: #333744;;
     height: 70px;
     line-height: 70px;
 }
@@ -133,19 +133,16 @@ export default {
     width: 270px!important;
     height: 1095px;
     float: left;
-    background: rgb(21, 27, 39)!important;
+    background: #333744!important;
 }
 
-.container .template{
-    font-size: 24px!important;
-}
 .container .el-breadcrumb{
   line-height: 50px;
   font-size: 18px;
   height: 50px;
 }
 .container .el-menu-item{
-  font-size: 19px;
+  font-size: 16px;
   background: rgb(91, 102, 124);
   color: white;
 }
@@ -158,5 +155,8 @@ export default {
 }
 .container{
   height: 100%;
+}
+.container .el-submenu__title{
+  font-size: 18px!important;
 }
 </style>

@@ -45,7 +45,7 @@ export default {
                 cancelButtonText: '取消',
                 type: 'info'
                 }).then(() => {
-                    this.$http.post('/addNews',{
+                    this.$http.post('boss/addNews',{
                         title:this.title,
                         publisher:this.publisher,
                         context:this.content

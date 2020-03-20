@@ -83,7 +83,7 @@ export default {
             ids.push(all[i].id);
           }
           console.log(ids)
-          this.$http.get('/sciapproval'+'?'+qs.stringify({Ids:ids},{ arrayFormat: 'repeat' })
+          this.$http.get('boss/sciapproval'+'?'+qs.stringify({Ids:ids},{ arrayFormat: 'repeat' })
           ).then(res=>{
             if(res){
               that.multipleSelection=[];
@@ -104,7 +104,7 @@ export default {
       getDataList(){
         let per={};
         let list=[];
-          this.$http.get('/scis').then(res=>{
+          this.$http.get('boss/scis').then(res=>{
               console.log(res)
               list=res.data.data.scis;   //获取用户列表信息
               let len=list.length;
@@ -153,7 +153,7 @@ export default {
 }
 #main .el-table .el-button--text{
     color: rgb(25, 127, 216);
-    font-size: 18px;
+    font-size: 16px;
     background: white;
 }
 </style>

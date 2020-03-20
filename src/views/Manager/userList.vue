@@ -17,7 +17,7 @@
         </div>
         <div class="newone" v-show="isshow">
                     <div style="margin: 20px;"></div>
-                    <el-form :label-position="labelPosition" label-width="100px" :rules="rules" :model="formLabelAlign" ref="formLabelAlign">
+                    <el-form :label-position="labelPosition" label-width="100px" :model="formLabelAlign" ref="formLabelAlign">
                     <el-form-item label="账号" required>
                         <el-input v-model="formLabelAlign.username"></el-input>
                     </el-form-item>
@@ -190,8 +190,10 @@
 import search from '../../components/Search'
 export default {
     data(){
+        const phoneReg = /^1[3|4|5|7|8][0-9]{9}$/
+        const mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/
+         // eslint-disable-next-line no-unused-vars
         var checkemail=(rule,value,callback)=>{
-           const mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/
             if (!value) {
             return callback(new Error('邮箱不能为空'))
             }
@@ -203,8 +205,8 @@ export default {
             }
             }, 100)
         }
+        // eslint-disable-next-line no-unused-vars
         var check_phone=(rule,value,callback)=>{
-            const phoneReg = /^1[3|4|5|7|8][0-9]{9}$/
             if (!value) {
                 return callback(new Error('电话号码不能为空'))
             }
@@ -275,15 +277,15 @@ export default {
         ],
         
         value: '',
-        rules:{
-            email:[
-                {validator:checkemail,trigger:'blur'}
+        // rules:{
+        //     email:[
+        //         {validator:checkemail,trigger:'blur'}
                 
-            ],
-            phone_number:[
-                {validator:check_phone,trigger:'blur'}
-            ],
-        }
+        //     ],
+        //     phone_number:[
+        //         {validator:check_phone,trigger:'blur'}
+        //     ],
+        // }
         }
             
     },
@@ -300,7 +302,7 @@ export default {
         //删除信息
         handleDelete(row) {
             console.log(row)
-            this.$http.get('/deleteuser',{
+            this.$http.get('boss/deleteuser',{
                 params:{
                     id:row.id
                 } 
@@ -330,7 +332,7 @@ export default {
        getDataList(){
            let per={};
            let list=[];
-           this.$http.get('/alluser').then(res=>{
+           this.$http.get('boss/alluser').then(res=>{
                console.log(res)
                //do_something
                this.totalCount=res.data.data.users.length;
@@ -358,12 +360,32 @@ export default {
            this.isshow=!this.isshow;
        },
        submit(){
+           const phoneReg = /^1[3|4|5|7|8][0-9]{9}$/
+           const mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/
            if(this.formLabelAlign.pass!=this.formLabelAlign.checkPass){
                alert("两次密码不相同");
                return;
            }
            let data=this.formLabelAlign;
            console.log(data)
+           if(!mailReg.test(data.mail)){
+               this.$notify({
+                title: '警告',
+                message: '请输入符合规范的邮箱',
+                type:'warning',
+                position: 'top-left'
+                });
+                return;
+           }
+            else if(!phoneReg.test(data.tel)){
+                this.$notify({
+                title: '警告',
+                message: '请输入正确的电话号码',
+                type:'warning',
+                position: 'top-left'
+                });
+                return;
+            }
            let params={
                "username":data.username,   
               "password":data.pass,
@@ -372,7 +394,7 @@ export default {
                "whether":data.whether,
                "role":data.role
            };
-           this.$http.post('/adduser',params).then(res=>{
+           this.$http.post('boss/adduser',params).then(res=>{
                if(res){
                    this.isshow=!this.isshow;
                }
@@ -382,7 +404,7 @@ export default {
            
        },
        edits(index, row){
-           this.$http.post('/updateUser',{
+           this.$http.post('boss/updateUser',{
                id:row.id,
                username:this.edit.name,
                mail:this.edit.mail,
@@ -408,7 +430,7 @@ export default {
            }else{
                w ='否';
            }
-           this.$http.post('/updateUser',{
+           this.$http.post('boss/updateUser',{
                id:row.id,
                whether:w
            }).then(res=>{
@@ -416,7 +438,7 @@ export default {
            })
        },
        submit_permission(index,row){
-           this.$http.post('/updateUser',{
+           this.$http.post('boss/updateUser',{
                id:row.id,
                role:this.value,
            }).then(res=>{
@@ -429,7 +451,7 @@ export default {
         //提交选择的权限
        },
        reSetpassword(row){
-           this.$http.get('/resetPwd',{
+           this.$http.get('boss/resetPwd',{
                params:{
                    id:row.id
                }
@@ -464,7 +486,7 @@ export default {
 }
 .container .el-breadcrumb{
   line-height: 50px;
-  font-size: 18px;
+  font-size: 16px;
   height: 50px;
 }
 #contain .el-main{
@@ -476,12 +498,12 @@ export default {
 #contain .el-table{
     
     line-height: 40px;
-    font-size: 22px;
+    font-size: 18px;
     color: black;
 }
 #contain .el-main .el-table .cell span{
-    line-height: 25px;
-    font-size: 19px;
+    line-height: 20px;
+    font-size: 16px;
 }
 #contain .el-pagination{
     text-align: center;

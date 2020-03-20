@@ -7,8 +7,8 @@ import 'element-ui/lib/theme-chalk/index.css'
 import axios from 'axios'
 import '../public/css/globle.css'
 
-axios.defaults.baseURL = '/boss'
-axios.defaults.headers.post['Content-Type'] = 'application/json; charset=utf-8';
+axios.defaults.baseURL = '/'
+
 Vue.config.productionTip = false
 
 Vue.use(ElementUI)

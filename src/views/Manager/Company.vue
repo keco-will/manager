@@ -83,7 +83,7 @@ export default {
           }
           console.log(ids) 
           
-          this.$http.get('/enterapproval'+'?'+qs.stringify({Ids:ids},{ arrayFormat: 'repeat' }) 
+          this.$http.get('boss/enterapproval'+'?'+qs.stringify({Ids:ids},{ arrayFormat: 'repeat' }) 
          ).then(res=>{
             if(res){
               that.multipleSelection=[];
@@ -103,7 +103,7 @@ export default {
       getDataList(){
           let per={};
           let list=[];
-          this.$http.get('/enters').then(res=>{
+          this.$http.get('boss/enters').then(res=>{
               list=res.data.data.enterpriseneeds;   //获取用户列表信息
               let len=list.length;
               for(let i=0 ;i<len;i++){
@@ -151,7 +151,7 @@ export default {
 }
 #main .el-table .el-button--text{
     color: rgb(25, 127, 216);
-    font-size: 18px;
+    font-size: 16px;
     background: white;
 }
 </style>

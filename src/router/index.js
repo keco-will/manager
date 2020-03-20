@@ -8,7 +8,7 @@ const routes = [
   managerRouter,
   {
     path: '/',
-    redirect: '/Login'
+    redirect: '/login'
   },
   {
     name:'login',
@@ -22,5 +22,8 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+
+
+
 
 export default router

@@ -4,7 +4,7 @@
           <div class="logo">
             靖江市科技镇长团管理系统
           </div>
-          <el-form :model="ruleForm" status-icon :rules="rules2" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+          <el-form :model="ruleForm" status-icon ref="ruleForm" label-width="100px" class="demo-ruleForm">
             <el-form-item label="用户名" prop="username">
               <el-input v-model="ruleForm.username" auto-complete="off"></el-input>
             </el-form-item>
@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import qs from 'qs';
 export default {
   data() {
       return{
@@ -33,19 +34,34 @@ export default {
     },
     methods: {
       submitForm() {
-        this.$http.post('',{
-          username:this.ruleForm.username,
-          password:this.ruleForm.pass
-        }).then(res=>{
-          if(res.code===200){
-            this.$router.push('../manager/userlist');
-          }
+        
+        this.$refs.ruleForm.validate(valid=>{
+          if(!valid) return;
+          this.$http.post('/user/login',qs.stringify({username:this.ruleForm.username,password:this.ruleForm.pass}),{headers: {'content-type':'application/x-www-form-urlencoded'}})
+        .then((res)=>{
+          console.log(res);
+          localStorage.setItem("Token",res.data.data.token);
+          localStorage.setItem("islogin",true);
+          this.$router.push('../manager/userlist');
+        })
         })
       },
       resetForm() {
         this.ruleForm={
             username:'',
             pass:'',
+        }
+      }
+    },
+    beforeRouteLeave(to,from,next){
+      console.log(to)
+      if(to.name==='userlist'){
+        
+        if(localStorage.getItem("Token")&&localStorage.getItem("islogin")){
+          console.log(123)
+          next()
+        }else{
+          next(false)
         }
       }
     }
