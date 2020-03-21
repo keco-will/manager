@@ -40,6 +40,9 @@ export default {
           this.$http.post('/user/login',qs.stringify({username:this.ruleForm.username,password:this.ruleForm.pass}),{headers: {'content-type':'application/x-www-form-urlencoded'}})
         .then((res)=>{
           console.log(res);
+          if(res.data.msg==='用户名不存在'){
+            alert('用户名不存在,请重新输入');
+          }
           localStorage.setItem("Token",res.data.data.token);
           localStorage.setItem("islogin",true);
           this.$router.push('../manager/userlist');
