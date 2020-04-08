@@ -4,6 +4,8 @@
             <el-input class="title" placeholder="题目" v-model="title"></el-input>
             <el-input class="publisher" placeholder="发布者" v-model="publisher"></el-input>
             <el-button type="success" round @click="publish()">发布</el-button>
+        <input accept="*.pdf,*.txt,*.doc" type="file" name="image" @change="getFile($event)" />
+            
         </div>
         <div class="write">
           <quill-editor
@@ -11,13 +13,12 @@
             max-height="950"
             v-model="content"
             ref="myQuillEditor"
-            style="height: 850px; width:1300px; margin:20px auto;"
+            style="height: 750px; width:1300px; margin:20px auto;"
             @change="onEditorChange($event)"
           >
           </quill-editor>
-         
         </div>
-        
+
     </div>
 </template>
 
@@ -32,30 +33,43 @@ export default {
             content:null,
             title:'',
             publisher:'',
+            file:null,
+            url:'',
         }
     },
     methods: {
         onEditorChange({ html }) {
-            console.log('editor change!', html)
             this.content = html
         },
+        getFile: function (event) {
+            this.file = event.target.files[0];
+        },
         publish(){
+            let news={};
             this.$confirm('是否确认发表?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'info'
                 }).then(() => {
-                    this.$http.post('boss/addNews',{
+                    
+                    let formdata = new FormData();
+                    formdata.append("File",this.file);
+                    this.$http.post('boss/upload',formdata).then((res)=>{
+                        this.url = res.data.data;
+                    })
+                    news={
                         title:this.title,
                         publisher:this.publisher,
-                        context:this.content
-                    }).then(()=>{
+                        context:this.content,
+                        fileURL:this.url
+                    };
+                    this.$http.post('boss/addNews',{news:news}).then(()=>{
                         this.$message({
                             type: 'success',
                             message: '提交成功!'
                             });
                         this.content=null;
-                        this.$router.go(-1)
+                        this.$router.go(0)
                     })
                 }).catch(() => {
                 this.$message({
@@ -63,7 +77,6 @@ export default {
                     message: '发布失败'
                 });          
                 });
-            
         }
     },
     components: {
@@ -78,17 +91,25 @@ export default {
     background: white;
 }
 .header{
-    width: 70%;
-    margin: 20px auto;
+    width: 50%;
+    margin: 0px auto;
+}
+.header .el-input{
+    margin-top:5px ;
 }
 #contain{
     width: 100%;
-    min-height: 1092px;
-    background: rgb(221, 221, 221);
+    min-height: 100%;
+    background: rgb(234,237,241);
 }
 #contain  .el-button.is-round{
     position: absolute;
-    margin: 0px 25px;
+    margin: 0px 10px;
+}
+input{
+    position: absolute;
+    top: 75px;
+    margin: 10px;
 }
 
 </style>

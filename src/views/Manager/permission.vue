@@ -86,7 +86,6 @@
         console.log(index, row);
       },
       handleClose(tag,row) {
-          console.log(tag)
         row.dynamicTags.splice(row.dynamicTags.indexOf(tag), 1);
         //向后台请求删除这个人的权限tag
       },
@@ -153,14 +152,11 @@
 #contain .el-main{
     height: 100%;
 }
-#main .el-table{
-    border: 1px black solid;
-}
+
 #main{
     height: 100%;
     background-color: white;
     width: 70%;
     margin: 10px auto;
-    border:1px black solid;
 } 
 </style>

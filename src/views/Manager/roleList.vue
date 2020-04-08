@@ -117,7 +117,6 @@
     },
     methods: {
       handleEdit(index, row) {
-        console.log(index, row);
         row.isdisable=!row.isdisable
        
       },
@@ -137,7 +136,6 @@
        },
        //提交增添信息
        submit_edit(row){  
-           console.log(123)   
            row.isdisable=!row.isdisable;
 
        }

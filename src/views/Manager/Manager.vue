@@ -43,10 +43,6 @@
           <el-menu-item index="4-2" @click="goPermissionList()">权限列表</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
-
-      
-
-      
     </el-menu>
   </el-aside>
   
@@ -66,20 +62,23 @@ export default {
     },
     methods:{
       handleOpen(key) {
+       
+
         this.actives=[key]
+        sessionStorage.setItem('actives',this.actives);
       },
         goUserList(){
-            // if(localStorage.getItem('isLogin'))
             this.$router.push('/manager/userlist')
             this.name='userlist'
         },
         quit(){
-            localStorage.getItem("islogin",false);
-            localStorage.getItem("Token","");
+          sessionStorage.clear()
             this.$router.push('/')
+            this.$store.commit('logout')
+            window.location.href="http://212.64.87.193/login";   
         },
         active(index){
-          console.log(123)
+
             this.actives=[index];
         },
         goRoleList(){
@@ -92,13 +91,18 @@ export default {
             this.$router.push('/manager/newsmanage');
         },
         goNoticePublish(){
-            this.$router.push('/manager/notise');
+            this.$router.push('/manager/announces');
         },
         goSincere(){
             this.$router.push('/manager/sincere');
         },
         goCompany(){
             this.$router.push('/manager/company');
+        }
+    },
+    mounted(){
+         if(sessionStorage.getItem('active')){
+          this.actives=sessionStorage.getItem('active');
         }
     }
 }
@@ -130,8 +134,8 @@ export default {
     float: left;
 }
 .container .el-aside{
-    width: 270px!important;
-    height: 1095px;
+    width: 260px!important;
+    height: 100%!important;
     float: left;
     background: #333744!important;
 }

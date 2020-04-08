@@ -1,5 +1,10 @@
 module.exports = {
+      publicPath: '/manager/',
+      outputDir: 'dist',
+      assetsDir: 'assets',
+      indexPath: 'index.html',
     devServer: { // 开发环境下runtime
+      
       proxy: { // 代理服务器
         // 接口地址为 http://127.0.0.1:7001/api/register
         '/': { 
@@ -7,10 +12,9 @@ module.exports = {
           secure: false, //是否使用 Https安全传输协议
           changeOrigin: true 
         },
-        
-       
-      }
-    }
+      },
+    },
+    
   }
   
   

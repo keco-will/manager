@@ -82,7 +82,6 @@ export default {
           for(let i =0;i<all.length;i++){
             ids.push(all[i].id);
           }
-          console.log(ids)
           this.$http.get('boss/sciapproval'+'?'+qs.stringify({Ids:ids},{ arrayFormat: 'repeat' })
           ).then(res=>{
             if(res){
@@ -105,7 +104,6 @@ export default {
         let per={};
         let list=[];
           this.$http.get('boss/scis').then(res=>{
-              console.log(res)
               list=res.data.data.scis;   //获取用户列表信息
               let len=list.length;
               for(let i=0 ;i<len;i++){
@@ -141,7 +139,7 @@ export default {
     height: 100%;
 }
 #main .el-table{
-    border: 2px rgb(197, 197, 197) double;
+    
     font-size: 20px;
 }
 #main .el-table .btn1 :hover{

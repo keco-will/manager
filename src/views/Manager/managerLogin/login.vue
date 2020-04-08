@@ -34,17 +34,26 @@ export default {
     },
     methods: {
       submitForm() {
-        
+        let that = this;
         this.$refs.ruleForm.validate(valid=>{
           if(!valid) return;
-          this.$http.post('/user/login',qs.stringify({username:this.ruleForm.username,password:this.ruleForm.pass}),{headers: {'content-type':'application/x-www-form-urlencoded'}})
+          this.$http.post('user/login',qs.stringify({username:that.ruleForm.username,password:that.ruleForm.pass}),{headers: {'content-type':'application/x-www-form-urlencoded'}})
         .then((res)=>{
           console.log(res);
           if(res.data.msg==='用户名不存在'){
             alert('用户名不存在,请重新输入');
+            return;
           }
-          localStorage.setItem("Token",res.data.data.token);
-          localStorage.setItem("islogin",true);
+          if(res.data.msg==='密码错误'){
+            alert('密码错误,请重新输入');
+            return;
+          }
+          this.$store.commit('handleUserName', res.data.data.userInfo.username)
+          this.$store.commit('handleAccount', res.data.data.userInfo.account)
+          sessionStorage.setItem('userToken', res.data.data.token)
+          sessionStorage.setItem('role', res.data.data.userInfo.role)
+          // sessionStorage.setItem("userToken",res.data.data.token);
+          // sessionStorage.setItem("islogin",true);
           this.$router.push('../manager/userlist');
         })
         })
@@ -59,9 +68,7 @@ export default {
     beforeRouteLeave(to,from,next){
       console.log(to)
       if(to.name==='userlist'){
-        
-        if(localStorage.getItem("Token")&&localStorage.getItem("islogin")){
-          console.log(123)
+        if(sessionStorage.getItem("userToken")&&sessionStorage.getItem("islogin")){
           next()
         }else{
           next(false)

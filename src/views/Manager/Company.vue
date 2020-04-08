@@ -139,7 +139,7 @@ export default {
     height: 100%;
 }
 #main .el-table{
-    border: 2px rgb(197, 197, 197) double;
+    
     font-size: 20px;
 }
 #main .el-table .btn1 :hover{

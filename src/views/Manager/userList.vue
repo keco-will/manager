@@ -1,6 +1,7 @@
 <template>
     <div id="contain">
        <el-container>
+           
     <el-header style="text-align: right; font-size: 20px" >
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
@@ -9,15 +10,34 @@
       </el-breadcrumb>
     </el-header>
     <el-main>
+        
+            <el-form :label-position="labelPosition" label-width="100px" :model="edit" class="edit_form" v-show="edit_show">
+                    <el-form-item label="用户名">
+                        <el-input v-model="edit.name" placeholder="必填"></el-input>
+                    </el-form-item>
+                    <el-form-item label="电话">
+                        <el-input v-model="edit.tel" placeholder="选填"></el-input>
+                    </el-form-item>
+                    <el-form-item label="邮箱">
+                        <el-input v-model="edit.mail" placeholder="选填"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button size="mini" round @click="edits()">提交</el-button>
+                        <el-button size="mini" round @click="edit_show = !edit_show "> 取消</el-button>
+                    </el-form-item>
+            </el-form>
         <div class="top">
-            <search class="search" @callback="forsearch">
-            
-        </search>
+             <el-input class="search" placeholder="请输入关键字" prefix-icon="el-icon-search" v-model="search"  v-on:change="filterTable"></el-input>
         <el-button round class="btn" @click="newone()">添加</el-button>
         </div>
         <div class="newone" v-show="isshow">
                     <div style="margin: 20px;"></div>
-                    <el-form :label-position="labelPosition" label-width="100px" :model="formLabelAlign" ref="formLabelAlign">
+                    <el-form 
+                    :label-position="labelPosition" 
+                    label-width="100px" 
+                    :model="formLabelAlign" 
+                    ref="formLabelAlign"
+                    :rules="rules">
                     <el-form-item label="账号" required>
                         <el-input v-model="formLabelAlign.username"></el-input>
                     </el-form-item>
@@ -29,18 +49,16 @@
                     </el-form-item>
                     <el-form-item 
                     label="手机号"
-                    prop="phone_number"
-                    required>
+                    prop="tel"
+                    >
                         <el-input v-model="formLabelAlign.tel"></el-input>
                     </el-form-item>
                     <el-form-item 
                     label="邮箱"
-                    prop="email"
-                    required
+                    prop="mail"
                     >
                         <el-input v-model="formLabelAlign.mail"></el-input>
                     </el-form-item>
-                   
                     <el-form-item label="是否启用" >
                         <el-select v-model="formLabelAlign.whether" placeholder="请选择">
                             <el-option
@@ -114,28 +132,10 @@
 
     <el-table-column label="操作">
       <template slot-scope="scope">
-          <el-popover
-            ref="popover4"
-            placement="right"
-            width="400"
-            trigger="click">
-            <el-form :label-position="labelPosition" label-width="100px" :model="edit">
-                    <el-form-item label="用户名">
-                        <el-input v-model="edit.name" placeholder="必填"></el-input>
-                    </el-form-item>
-                    <el-form-item label="电话">
-                        <el-input v-model="edit.tel" placeholder="必填"></el-input>
-                    </el-form-item>
-                    <el-form-item label="邮箱">
-                        <el-input v-model="edit.mail" placeholder="必填"></el-input>
-                    </el-form-item>
-                </el-form>
-                <el-button size="mini" round @click="edits(scope.$index, scope.row)">提交</el-button>
-            </el-popover>
         <el-button
           size="mini"
-          v-popover:popover4
-          class="edit_btn">编辑</el-button>
+          class="edit_btn"
+          @click="open(scope.row)">编辑</el-button>
         <el-button
           size="mini"
           type="danger"
@@ -162,7 +162,7 @@
           <el-button
           size="mini"
           class="fenpeiquanxian"
-          v-popover:popover3>分配权限</el-button>
+          v-popover:popover3>更换角色</el-button>
           <el-button
           size="mini"
           class="edit_btn"
@@ -187,42 +187,34 @@
     </div>
 </template>
 <script>
-import search from '../../components/Search'
+
 export default {
     data(){
-        const phoneReg = /^1[3|4|5|7|8][0-9]{9}$/
-        const mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/
+        const phoneReg = /^1[34578]\d{9}$/
+        const mailReg = /^\w+@\w+(\.\w+)+$/
          // eslint-disable-next-line no-unused-vars
         var checkemail=(rule,value,callback)=>{
             if (!value) {
             return callback(new Error('邮箱不能为空'))
             }
-            setTimeout(() => {
-            if (mailReg.test(value)) {
-                callback()
-            } else {
-                callback(new Error('请输入正确的邮箱格式'))
+            if(mailReg.test(value)){
+                return callback()
             }
-            }, 100)
+            callback(new Error('请输入合法邮箱'))
         }
         // eslint-disable-next-line no-unused-vars
         var check_phone=(rule,value,callback)=>{
             if (!value) {
                 return callback(new Error('电话号码不能为空'))
             }
-            setTimeout(() => {
-            if (!Number.isInteger(+value)) {
-                callback(new Error('请输入数字值'))
-            } else {
-                if (phoneReg.test(value)) {
-                callback()
-                } else {
-                callback(new Error('电话号码格式不正确'))
-                }
+            if(phoneReg.test(value)){
+                return callback()
             }
-            }, 100)
+            callback(new Error('请输入合法的手机号码'))
         }
         return{
+            edit_show:false,
+            row:null,
           tableData: [
               
           ],
@@ -275,17 +267,18 @@ export default {
                 label:'否',
             }
         ],
-        
+        rules:{
+            mail:[
+                {validator:checkemail,trigger:'blur'},
+                {required:true, message:'请输入联系人邮箱',trigger:'blur'},
+            ],
+            tel:[
+                {required:true, message:'请输入联系人电话',trigger:'blur'},
+                {validator:check_phone,trigger:'blur'}
+            ]
+        },
         value: '',
-        // rules:{
-        //     email:[
-        //         {validator:checkemail,trigger:'blur'}
-                
-        //     ],
-        //     phone_number:[
-        //         {validator:check_phone,trigger:'blur'}
-        //     ],
-        // }
+        search:'',
         }
             
     },
@@ -298,10 +291,25 @@ export default {
             }
         }
     },
+    watch:{
+        edit_show(val,old){
+            if(val === false && val !== old){
+                this.edit={
+                    name:'',
+                    mail:'',
+                    tel:'',
+                }
+            }
+        },
+        isshow(val,old){
+            if(val === false && val !== old){
+                this.formLabelAlign={}
+            }
+        }
+    },
     methods:{
         //删除信息
         handleDelete(row) {
-            console.log(row)
             this.$http.get('boss/deleteuser',{
                 params:{
                     id:row.id
@@ -310,13 +318,14 @@ export default {
                 if(row.role==='管理员'){
                     alert('该账号是管理员，删除失败！')
                 }else{
-                    console.log(123)
-                this.$router.go(0);
+                    this.$router.go(0);
                 }
             })
         },
-        forsearch(val){
-            console.log(val)
+        //编辑信息
+        open(row){
+            this.edit_show=!this.edit_show;
+            this.row=row;
         },
         handleSizeChange(val) {
            // 改变每页显示的条数 
@@ -332,7 +341,7 @@ export default {
        getDataList(){
            let per={};
            let list=[];
-           this.$http.get('boss/alluser').then(res=>{
+           this.$http.get('boss/alluser').then((res)=>{
                console.log(res)
                //do_something
                this.totalCount=res.data.data.users.length;
@@ -353,7 +362,6 @@ export default {
                    this.tableData.push(per);
                    per={};
                }
-               
            })
        },
        newone(){
@@ -367,7 +375,6 @@ export default {
                return;
            }
            let data=this.formLabelAlign;
-           console.log(data)
            if(!mailReg.test(data.mail)){
                this.$notify({
                 title: '警告',
@@ -399,18 +406,62 @@ export default {
                    this.isshow=!this.isshow;
                }
            }).then(()=>{
-               this.$router.go(0)
+               location.reload();
            })
            
        },
-       edits(index, row){
+       filterTable() {
+          let fTable;
+          if(this.search!=''){
+              if (this.tableData) {
+              fTable = this.tableData.filter(
+                p => p.username.indexOf(this.search) != -1
+              )
+              this.tableData = fTable
+            } else {
+              this.getDataList();
+            }
+          }else{
+            this.tableData=[];
+            this.getDataList();
+          }
+      },
+       edits(){
+           const phoneReg = /^1[3|4|5|7|8][0-9]{9}$/
+           const mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/
+           let data=this.edit;
+           if(data.mail){
+                if(!mailReg.test(data.mail)){
+                this.$notify({
+                    title: '警告',
+                    message: '请输入符合规范的邮箱',
+                    type:'warning',
+                    position: 'top-left'
+                    });
+                    return;
+                }
+           }else{
+               data.mail = this.row.mail;
+           }
+           if(data.tel){
+               if(!phoneReg.test(data.tel)){
+                this.$notify({
+                title: '警告',
+                message: '请输入正确的电话号码',
+                type:'warning',
+                position: 'top-left'
+                });
+                return;
+            }
+           }else{
+               data.tel=this.row.tel;
+           }
            this.$http.post('boss/updateUser',{
-               id:row.id,
-               username:this.edit.name,
-               mail:this.edit.mail,
-               tel:this.edit.tel
-           }).then(res=>{
-               console.log(res)
+               id:this.row.id,
+               username:data.name,
+               mail:data.mail,
+               tel:data.tel
+           }).then(()=>{
             //    location.reload()
                 this.$router.go(0)
                alert('修改成功')
@@ -433,16 +484,13 @@ export default {
            this.$http.post('boss/updateUser',{
                id:row.id,
                whether:w
-           }).then(res=>{
-               console.log(res);
            })
        },
        submit_permission(index,row){
            this.$http.post('boss/updateUser',{
                id:row.id,
                role:this.value,
-           }).then(res=>{
-               console.log(res);
+           }).then(()=>{
                this.value='';
                alert('设置成功');
            })
@@ -463,7 +511,7 @@ export default {
        }
     },
     components:{
-        search
+        
     },
     mounted(){
         this.getDataList();
@@ -531,5 +579,23 @@ export default {
     color: rgb(8, 8, 8);
     width:100px;
     margin: 10px;
+}
+.el-main .edit_form{
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    z-index: 9;
+    transform: translate(-50%,-50%);
+    width: 600px;
+    height: 300px;
+    
+    background: rgb(194, 199, 204);
+}
+.el-main .edit_form .el-input{
+    width: 90%;
+}
+.el-main .edit_form .el-form-item{
+    margin-top: 25px;
+
 }
 </style>

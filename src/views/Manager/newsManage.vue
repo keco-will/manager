@@ -10,14 +10,17 @@
     </el-header>
     <el-main>
         <div id="main">
-            <el-button round class="btn1" @click="goAddNews()">发布新闻</el-button>
+            <el-button round class="btn1 left" @click="goAddNews()">发布新闻</el-button>
+            <el-input placeholder="请输入关键字" prefix-icon="el-icon-search" v-model="search" class="input" v-on:change="filterTable"></el-input>
             <el-table
                 :data="tableData"
                 stripe
                 style="width: 100%">
                 <el-table-column
-                prop="title"
                 label="新闻列表">
+                  <template slot-scope="scope">  
+                        <el-button type="text" class="btn2" @click="forMore(scope.row)">{{scope.row.title}}</el-button>
+                    </template>
                 </el-table-column>
                 <el-table-column
                 prop="time"
@@ -50,7 +53,8 @@ export default {
     data() {
       return {
         tableData: [],
-        totalCount:0
+        totalCount:0,
+        search:''
       }
     },
      methods: {
@@ -75,6 +79,7 @@ export default {
       },
        getDataList(){
           let per={};
+          this.tableData=[];
            this.$http.get('boss/news').then((res)=>{
                 let list = res.data.data;
                 let len = list.length; 
@@ -86,9 +91,28 @@ export default {
                   this.tableData.push(per);
                   per={}
                 }
-                console.log(this.tableData)
            })
        },
+        filterTable() {
+          let fTable;
+          if(this.search!=''){
+              if (this.tableData) {
+              fTable = this.tableData.filter(
+                p => p.title.indexOf(this.search) != -1
+              )
+              this.tableData = fTable
+            } else {
+              this.getDataList();
+            }
+          }else{
+            this.tableData=[];
+            this.getDataList();
+          }
+      },
+      forMore(row){
+          this.$router.push({ name: 'updateNews', params: { newsId: row.id }});
+      },
+
     },
     mounted(){
       this.getDataList()
@@ -102,7 +126,9 @@ export default {
     height: 100%;
     background: rgb(234,237,241);
 }
-
+.left{
+  float: left;
+}
 .container .el-breadcrumb{
   line-height: 50px;
   font-size: 18px;
@@ -110,10 +136,15 @@ export default {
 }
 #contain .el-main{
     height: 100%;
+    line-height: 100%;
 }
 #main{
   width: 100%;
   margin: 10px auto;
+}
+.input{
+  width: 15%;
+  margin-left:20px ;
 }
 #main .btn1{
     background: rgb(80, 144, 182);
@@ -127,5 +158,8 @@ export default {
 #main .el-table .cell span{
     line-height: 26px;
     font-size: 16px;
+}
+#main .btn2 :hover{
+    border-color: white;
 }
 </style>
