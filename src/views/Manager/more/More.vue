@@ -1,5 +1,5 @@
 <template>
-    <div id="contain">
+    <div class="contain">
         <el-header style="text-align: right; font-size: 20px" >
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
@@ -7,26 +7,10 @@
         <el-breadcrumb-item >{{dowhat}}</el-breadcrumb-item>
       </el-breadcrumb>
     </el-header>
+    <div class="nimazhale">
         <div class="head">
             <div class="header">{{logo}}</div>
-        <ul class="about" v-if="flag===1">
-            学科类型：
-            <li class="left" v-for="(item , index) in sic.confic" :key="index">
-                {{item.confic}}
-            </li>
-        
-            <a :href="URL" :download="filename" v-if="URL"></a>
-        </ul>
-        <div v-else>
-            <ul class="about">
-                需求学科：
-                <li v-for="(item,index) in cop.needs" :key="index">
-                {{item.needs}}
-                </li>
-                <a :href="URL" :download="URL" v-if="URL"></a>
-            
-            </ul>
-        </div>
+            <a :href="URL" v-if="URL"></a>
         </div>
         <div class="main">
              <ul class="show_part" v-if="flag===1"> 
@@ -44,13 +28,29 @@
                     </div>
                  </li>
                  <li>
-                    技术成熟度：{{sic.maturity}}
+                     学科类型：
+                     <div>
+                         {{needing}}
+                     </div>
+            
+                 </li>
+                 <li>
+                    技术成熟度：
+                    <div>
+                        {{sic.maturity}}
+                    </div>
                 </li>
                 <li>
-                    负责人：{{sic.charge}}
+                    负责人：
+                    <div>
+                        {{sic.charge}}
+                    </div>
                 </li>
                 <li>
-                    负责人职称：{{sic.position}}
+                    负责人职称：
+                    <div>
+                        {{sic.position}}
+                    </div>
                 </li>
                 <li>
                     联系方式
@@ -78,6 +78,12 @@
                     </div>
                  </li>
                  <li>
+                     需求学科：
+                     <div>
+                         {{needing}}
+                     </div>
+                 </li>
+                 <li>
                     联系方式
                     <div>
                         联系人：{{cop.contacts}}<br>
@@ -91,7 +97,7 @@
             <el-button type="success" round size="small" @click="pass()">审核通过</el-button>
             <el-button type="warning" round size="small" @click="notPass()">拒绝通过</el-button>
         </div>
-
+    </div>
     </div>
 </template>
 
@@ -112,6 +118,7 @@ export default {
             cop:{},
             filename:'',
             dowhat:'',   //面包学地址
+            needing:'',
         }
     },
     methods:{
@@ -122,12 +129,14 @@ export default {
                 this.id=this.$route.params.sincereId;
                 this.dowhat='科研成果'
                 this.flag=1;  
+                
             }else{
                 this.logo='';
                 this.id=-1;   //清空缓存的数据
                 this.id=this.$route.params.companyId;
                 this.dowhat='企业需求';
                 this.flag=2;
+                
             }
         },
         getHTML_sci(id){
@@ -136,7 +145,6 @@ export default {
                     id:id
                 }
             }).then(res=>{
-               
                 let data=res.data.data.Sci;
                 this.logo = data.entryname;
                 this.content.results=data.results;
@@ -151,8 +159,12 @@ export default {
                 this.sic.confic=data.disciplines;
                 this.sic.position = data.position;
                 this.URL=data.fileurl;
-
-                this.filename=data.filename;
+                //this.filename=data.filename;
+                for(let i=0;i< this.sic.confic.length;i++ ){
+                    this.needing += '  ';
+                    this.needing += this.sic.confic[i].confic;
+                }
+                
             })
         },
         getHTML_company(id){
@@ -161,7 +173,6 @@ export default {
                     id:id
                 }
             }).then(res=>{
-                 console.log(res)
                 let data=res.data.data.enterpriseneeds;
                 this.logo = data.title;
                 this.content.intro=data.intro;
@@ -171,8 +182,11 @@ export default {
                 this.cop.needs=data.needs;
                 this.cop.mail=data.mail;
                 this.URL=data.fileurl;
-
-                this.filename = data.filename;
+                //this.filename = data.filename;
+                for(let i=0;i< this.cop.needs.length;i++ ){
+                    this.needing += '  ';
+                    this.needing += this.cop.needs[i].needs;
+                }
             })
         },
         handleClose(done) {
@@ -257,33 +271,33 @@ export default {
 </script>
 
 <style scoped>
-#contain{
+@import url('/public/css/scoll.css');
+.contain{
     width: 100%;
     height: 100%;
-    background: white;
 }
 .left{
     float: left;
 }
-#contain .el-header{
+.contain .el-header{
     padding: 0;
 }
-#contain .el-breadcrumb{
+.contain .el-breadcrumb{
   line-height: 50px;
   font-size: 16px;
   height: 50px;
   background: rgb(234,237,241);
 }
-#contain .el-breadcrumb__item{
+.contain .el-breadcrumb__item{
     margin-left: 10px;
 }
 .head{
     width: 100%;
-    height: 70px;
+    height: 55px;
     border-bottom: 1px rgb(209, 209, 209) dashed;
 }
-#contain .about{
-    width: 35%;
+.contain .about{
+    width: 40%;
     font-size: 15px;
     display: flex;
     font-weight: 300;
@@ -296,7 +310,7 @@ export default {
     margin-right: 20px;
     list-style: none;
 }
-#contain .main{
+.contain .main{
     width: 90%;
     margin:0px auto;
     font-size: 16px;
@@ -307,18 +321,20 @@ export default {
     width: 90%;
     margin: 0px auto;
 }
+
 .main li{
     font-weight:bold ;
     font-size: 18px;
     list-style: none;
-    margin-top: 20px;
+    margin-top: 40px;
+    border-bottom:1px rgb(209, 209, 209) dashed;
 }
 .main li > div{
     font-size: 16px;
     font-weight: 500;
     line-height: 20px;
 }
-#contain .main .el-button{
+.contain .main .el-button{
     float: right;
     margin-right: 60px;
     color: rgb(20, 13, 13);
@@ -327,9 +343,9 @@ export default {
 .header{
     width: 100%;
     text-align: center;
-    line-height: 25px;
+    line-height: 55px;
     font-size: 25px;
-    margin: 5px;
+    margin: 0px;
 }
 
 .btns{
@@ -340,5 +356,12 @@ export default {
 .btns .el-button{
     margin-left:15px ;
     
+}
+.nimazhale{
+    width: 95%;
+    min-height: 10%;
+    margin: 0 auto;
+    background: white;
+    padding-top: 5px;
 }
 </style>

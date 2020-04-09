@@ -10,24 +10,7 @@
     </el-header>
     <el-main>
         <div id="main">
-            <!-- <div class="top">
-                <el-button type="primary" style="margin:20px; width:80px; height:40px "
-                @click="add_btn()">添加</el-button>
-            </div>
-            <div class="newone" v-show="isshow">
-                    <div style="margin: 20px;"></div>
-                    <el-form :label-position="labelPosition" label-width="100px" :model="formLabelAlign">
-                    
-                    <el-form-item label="角色名称">
-                        <el-input v-model="formLabelAlign.roleNmae"></el-input>
-                    </el-form-item>
-                    <el-form-item label="角色描述">
-                        <el-input v-model="formLabelAlign.describe"></el-input>
-                    </el-form-item>
-                    
-                </el-form>
-                <div style="margin-left: 20px;"><el-button type="text" @click="submit()">提交</el-button></div>
-        </div> -->
+           
             <div class="table">
                 <el-table
                     :data="tableData"
@@ -51,30 +34,22 @@
                         </div>
                     </template>
                     </el-table-column>
-                    <!-- <el-table-column
-                    label="角色描述"
-                    width="400">
-                    <template slot-scope="scope">
-                        <span style="margin-left: 10px">{{ scope.row.describe}}</span>
-                    </template>
-                    </el-table-column> -->
+                    
                     <el-table-column label="操作">
                     <template slot-scope="scope">
                         <el-button
+                        disabled="true"
                         class="edit"
                         size="mini"
                         @click="handleEdit(scope.$index, scope.row)">
-                        <span v-if="scope.row.isdisable">
+                        <span v-if="scope.row.isdisable" > 
                             编辑
                         </span>
                         <span v-else>
                             确定
                         </span>
                         </el-button>
-                        <!-- <el-button
-                        size="mini"
-                        type="danger"
-                        @click="handleDelete(scope.$index, scope.row)">删除</el-button> -->
+                       
                     </template>
                     </el-table-column>
                 </el-table>

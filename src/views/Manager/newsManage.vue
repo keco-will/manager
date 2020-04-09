@@ -12,6 +12,7 @@
         <div id="main">
             <el-button round class="btn1 left" @click="goAddNews()">发布新闻</el-button>
             <el-input placeholder="请输入关键字" prefix-icon="el-icon-search" v-model="search" class="input" v-on:change="filterTable"></el-input>
+            <el-button round class="btn" @click="filterTable" style="margin-left:20px;">搜索</el-button>
             <el-table
                 :data="tableData"
                 stripe

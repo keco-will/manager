@@ -8,8 +8,8 @@
                 <el-button type="info" @click="quit()">退出</el-button>
             </div>
         </div>
-        <el-container style="height: 100%; ">
-  <el-aside width="200px" style="background-color: rgb(238, 241, 246); height:100%;">
+        <el-container style="height: 100%;">
+  <el-aside  style="background-color: rgb(238, 241, 246); height:100%;">
     <el-menu :default-openeds="actives"
       background-color="rgb(21, 27, 39)"
       text-color="#fff"
@@ -46,9 +46,9 @@
     </el-menu>
   </el-aside>
   
-  <el-container>
+  <el-main>
       <router-view ></router-view>
-  </el-container>
+  </el-main>
 </el-container>
     </div>
 </template>
@@ -135,11 +135,14 @@ export default {
 }
 .container .el-aside{
     width: 260px!important;
-    height: 100%!important;
+    height: 100%;
     float: left;
     background: #333744!important;
 }
 
+.container .el-main{
+  background: rgb(234,237,241);
+}
 .container .el-breadcrumb{
   line-height: 50px;
   font-size: 18px;
@@ -157,8 +160,11 @@ export default {
   background: rgb(21, 27, 39);
   color: white;
 }
-.container{
+.container , .el-container,.el-main{
   height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
 }
 .container .el-submenu__title{
   font-size: 18px!important;

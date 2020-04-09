@@ -10,24 +10,9 @@
       </el-breadcrumb>
     </el-header>
     <el-main>
-        
-            <el-form :label-position="labelPosition" label-width="100px" :model="edit" class="edit_form" v-show="edit_show">
-                    <el-form-item label="用户名">
-                        <el-input v-model="edit.name" placeholder="必填"></el-input>
-                    </el-form-item>
-                    <el-form-item label="电话">
-                        <el-input v-model="edit.tel" placeholder="选填"></el-input>
-                    </el-form-item>
-                    <el-form-item label="邮箱">
-                        <el-input v-model="edit.mail" placeholder="选填"></el-input>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-button size="mini" round @click="edits()">提交</el-button>
-                        <el-button size="mini" round @click="edit_show = !edit_show "> 取消</el-button>
-                    </el-form-item>
-            </el-form>
         <div class="top">
              <el-input class="search" placeholder="请输入关键字" prefix-icon="el-icon-search" v-model="search"  v-on:change="filterTable"></el-input>
+        <el-button round class="btn" @click="filterTable">搜索</el-button>
         <el-button round class="btn" @click="newone()">添加</el-button>
         </div>
         <div class="newone" v-show="isshow">
@@ -132,6 +117,26 @@
 
     <el-table-column label="操作">
       <template slot-scope="scope">
+
+          <el-dialog title="信息编辑" :visible.sync="edit_show">
+                <el-form :label-position="labelPosition" label-width="100px" :model="edit">
+                    <el-form-item label="用户名">
+                        <el-input v-model="edit.name" placeholder="必填"></el-input>
+                    </el-form-item>
+                    <el-form-item label="电话">
+                        <el-input v-model="edit.tel" placeholder="选填"></el-input>
+                    </el-form-item>
+                    <el-form-item label="邮箱">
+                        <el-input v-model="edit.mail" placeholder="选填"></el-input>
+                    </el-form-item>
+                    
+                </el-form>
+            <div slot="footer" class="dialog-footer btn_color">
+                <el-button size="mini" round @click="edits()" type="primary">提交</el-button>
+                <el-button size="mini" round @click="edit_show = !edit_show " type="info"> 取消</el-button>
+            </div>
+            </el-dialog>
+
         <el-button
           size="mini"
           class="edit_btn"
@@ -219,7 +224,7 @@ export default {
               
           ],
           //用户在有科研文章需要审核的时候，不能删除操作，该list和tabledata对应
-          ifcould:[],    
+        ifcould:[],    
           // 默认显示第几页
         currentPage:1,
         // 总条数，根据接口获取数据长度(注意：这里不能为空)
@@ -325,6 +330,13 @@ export default {
         //编辑信息
         open(row){
             this.edit_show=!this.edit_show;
+            if(this.edit_show===true){
+                this.edit={
+                    name:row.username,
+                    mail:row.mail,
+                    tel:row.tel,
+                }
+            }
             this.row=row;
         },
         handleSizeChange(val) {
@@ -341,9 +353,8 @@ export default {
        getDataList(){
            let per={};
            let list=[];
+           this.tableData=[];
            this.$http.get('boss/alluser').then((res)=>{
-               console.log(res)
-               //do_something
                this.totalCount=res.data.data.users.length;
                list=res.data.data.users;
                for(let i=0;i<this.totalCount;i++){
@@ -414,15 +425,14 @@ export default {
           let fTable;
           if(this.search!=''){
               if (this.tableData) {
-              fTable = this.tableData.filter(
-                p => p.username.indexOf(this.search) != -1
-              )
-              this.tableData = fTable
+                fTable = this.tableData.filter(
+                    p => p.username.indexOf(this.search) != -1
+                )
+                this.tableData = fTable
             } else {
               this.getDataList();
             }
           }else{
-            this.tableData=[];
             this.getDataList();
           }
       },
@@ -580,22 +590,7 @@ export default {
     width:100px;
     margin: 10px;
 }
-.el-main .edit_form{
-    position: absolute;
-    top: 35%;
-    left: 50%;
-    z-index: 9;
-    transform: translate(-50%,-50%);
-    width: 600px;
-    height: 300px;
-    
-    background: rgb(194, 199, 204);
-}
-.el-main .edit_form .el-input{
-    width: 90%;
-}
-.el-main .edit_form .el-form-item{
-    margin-top: 25px;
-
+.btn_color .el-button{
+    background: rgb(206, 206, 206);
 }
 </style>
